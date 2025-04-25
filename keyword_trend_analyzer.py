@@ -3,19 +3,25 @@ from pyflink.datastream.connectors import FlinkKafkaConsumer, FlinkElasticsearch
 from pyflink.common.serialization import SimpleStringSchema
 from pyflink.common.typeinfo import Types
 from pyflink.common.restart_strategy import RestartStrategies
+import os, requests, json, time
+from dotenv import load_dotenv
 
 import json
 import re
+
+# Load environment variables from .env file
+load_dotenv()
 
 # --- 환경 설정 ---
 env = StreamExecutionEnvironment.get_execution_environment()
 env.set_parallelism(1)
 env.enable_checkpointing(5000)
 env.set_restart_strategy(RestartStrategies.fixed_delay_restart(3, 10000))
+EC2_HOST = os.getenv('EC2')
 
 # --- Kafka Consumer 설정 ---
 kafka_props = {
-    'bootstrap.servers': 'ec2-13-219-225-137.compute-1.amazonaws.com:9092',
+    'bootstrap.servers': f'{EC2_HOST}:9092',
     'group.id': 'flink-news-group',
     'auto.offset.reset': 'earliest'
 }
