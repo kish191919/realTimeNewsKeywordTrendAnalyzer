@@ -1,6 +1,3 @@
-# .env 파일 무시
-.env
-
-# 모든 .jar 파일 무시
 *.jar
-
+*.env
+target/
